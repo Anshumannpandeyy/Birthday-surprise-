@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Surprise</title>
+  <style>
+    :root {
+      --bg-dark-1: #190b24;
+      --bg-dark-2: #36123d;
+      --bg-warm-1: #fff6f0;
+      --bg-warm-2: #ffe3e8;
+      --accent: #ff5c8a;
+      --accent-2: #ffb347;
+      --text-light: #fff9fb;
+      --text-dark: #2c1629;
+      --card-bg: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: radial-gradient(circle at top, var(--bg-dark-2), var(--bg-dark-1));
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: background 0.8s ease, color 0.8s ease;
+    }
+
+    body.light-mode {
+      background: linear-gradient(135deg, var(--bg-warm-1), var(--bg-warm-2));
+      color: var(--text-dark);
+    }
+
+    /* Ambient floating particles */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.45;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(110vh) scale(0.8);
+      }
+      to {
+        transform: translateY(-15vh) scale(1.2);
+      }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 680px;
+      padding: 24px 18px;
+      text-align: center;
+    }
+
+    .scene {
+      display: none;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .scene.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .btn {
+      margin-top: 22px;
+      padding: 12px 26px;
+      border: none;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #ff8552);
+      box-shadow: 0 10px 25px rgba(255, 92, 138, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 14px 30px rgba(255, 92, 138, 0.45);
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: none;
+    }
+
+    /* Scene 1: Intro Heart & Arrow */
+    .intro-sub {
+      font-size: 1.05rem;
+      letter-spacing: 0.5px;
+      opacity: 0.85;
+      margin-bottom: 18px;
+    }
+
+    .heart-stage {
+      position: relative;
+      width: 240px;
+      height: 190px;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .glow-heart {
+      font-size: 5.5rem;
+      filter: drop-shadow(0 0 24px rgba(255, 77, 121, 0.65));
+      animation: pulseHeart 1.6s infinite ease-in-out;
+    }
+
+    .arrow {
+      position: absolute;
+      left: -30px;
+      top: 52%;
+      font-size: 2rem;
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
+    }
+
+    .heart-stage.shot .arrow {
+      transform: translateX(135px) translateY(-8px);
+      opacity: 0;
+    }
+
+    .heart-stage.shot .glow-heart {
+      transform: scale(1.22);
+      transition: transform 0.4s ease;
+    }
+
+    @keyframes pulseHeart {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    /* Scene 2: Heart Tree */
+    .tree-box {
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 28px 20px;
+      box-shadow: 0 18px 45px rgba(80, 20, 50, 0.12);
+    }
+
+    .canopy {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      max-width: 250px;
+      margin: 12px auto 0;
+    }
+
+    .leaf-heart {
+      font-size: 1.35rem;
+      animation: popIn 0.5s ease backwards;
+    }
+
+    .trunk {
+      width: 14px;
+      height: 68px;
+      background: linear-gradient(#6e3b23, #4a2514);
+      margin: 0 auto 14px;
+      border-radius: 0 0 8px 8px;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Scene 3: Cake & Candle */
+    .cake-wrap {
+      margin: 26px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .candle {
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+
+    .cake-layer {
+      border-radius: 12px;
+      background: linear-gradient(90deg, #ff9ebb, #ffd1dc, #ff9ebb);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      transform: translateY(-25px);
+      transition: all 0.45s ease;
+    }
+
+    .cake-layer.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .layer-top { width: 130px; height: 26px; }
+    .layer-mid { width: 170px; height: 32px; }
+    .layer-bot { width: 210px; height: 38px; }
+
+    /* Scene 4: Pop the Balloons */
+    .balloons-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin: 22px 0;
+    }
+
+    .balloon {
+      width: 68px;
+      height: 84px;
+      border-radius: 50% 50% 46% 46%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      cursor: pointer;
+      position: relative;
+      box-shadow: inset -6px -8px 14px rgba(0, 0, 0, 0.2), 0 10px 20px rgba(0, 0, 0, 0.25);
+      transition: transform 0.25s ease, opacity 0.35s ease;
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -18px;
+      width: 2px;
+      height: 18px;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .balloon:hover {
+      transform: translateY(-6px) scale(1.05);
+    }
+
+    .balloon.popped {
+      transform: scale(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .reasons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .reason-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      padding: 12px 16px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .reason-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-2);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    /* Scene 5: Memory Lane */
+    .memory-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      padding: 16px;
+      max-width: 380px;
+      margin: 20px auto 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .memory-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .memory-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    /* Scene 6: Envelope Letter */
+    .envelope {
+      width: 170px;
+      height: 115px;
+      margin: 24px auto;
+      background: linear-gradient(135deg, #ffd166, #f4a261);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      cursor: pointer;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+      transition: transform 0.25s ease;
+    }
+
+    .envelope:hover {
+      transform: scale(1.05);
+    }
+
+    .letter-paper {
+      display: none;
+      background: #fffdf7;
+      color: #2b1d26;
+      border-radius: 18px;
+      padding: 26px 22px;
+      text-align: left;
+      margin-top: 18px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      line-height: 1.65;
+      white-space: pre-line;
+    }
+
+    .letter-paper.open {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    /* Scene 7: Finale */
+    .finale-title {
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      font-weight: 800;
+      margin: 12px 0;
+      background: linear-gradient(90deg, #ff758f, #ffb347, #ffd166);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      top: -12px;
+      width: 10px;
+      height: 14px;
+      z-index: 20;
+      pointer-events: none;
+      animation: confettiFall linear forwards;
+    }
+
+    @keyframes confettiFall {
+      to {
+        transform: translateY(105vh) rotate(720deg);
+        opacity: 0.9;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <!-- SCENE 1: INTRO -->
+    <section class="scene active" id="scene-1">
+      <p class="intro-sub" id="intro-subtitle"></p>
+      <div class="heart-stage" id="heart-stage" onclick="shootArrow()">
+        <span class="arrow">🏹</span>
+        <span class="glow-heart" id="intro-heart"></span>
+      </div>
+      <p style="opacity: 0.75; font-size: 0.92rem;">Tap the heart to begin ✨</p>
+    </section>
+
+    <!-- SCENE 2: HEART TREE -->
+    <section class="scene" id="scene-2">
+      <div class="tree-box">
+        <p style="font-size: 0.95rem; opacity: 0.8;" id="tree-top-label"></p>
+        <h2 style="font-size: 2rem; margin: 6px 0;" id="tree-heading"></h2>
+        <p style="opacity: 0.85;" id="tree-sub-label"></p>
+        <div class="canopy" id="tree-canopy"></div>
+        <div class="trunk"></div>
+        <button class="btn" onclick="goToScene(3)">Next Surprise →</button>
+      </div>
+    </section>
+
+    <!-- SCENE 3: CAKE & CANDLE -->
+    <section class="scene" id="scene-3">
+      <h2 id="cake-title"></h2>
+      <p style="opacity: 0.8; margin-top: 6px;" id="cake-status">Baking something sweet...</p>
+      <div class="cake-wrap">
+        <div class="candle" id="candle" onclick="blowCandle()" style="opacity: 0;">🕯️</div>
+        <div class="cake-layer layer-top" id="layer-1"></div>
+        <div class="cake-layer layer-mid" id="layer-2"></div>
+        <div class="cake-layer layer-bot" id="layer-3"></div>
+      </div>
+      <p id="wish-text" style="min-height: 24px; color: var(--accent-2); font-weight: 600;"></p>
+      <button class="btn" id="cake-next-btn" style="display: none;" onclick="goToScene(4)">Pop Balloons 🎈</button>
+    </section>
+
+    <!-- SCENE 4: POP THE BALLOONS -->
+    <section class="scene" id="scene-4">
+      <h2>Pop the balloons 🎈</h2>
+      <p style="opacity: 0.82; margin-top: 6px;" id="balloon-instruction"></p>
+      <div class="balloons-row" id="balloons-row"></div>
+      <div class="reasons-list" id="reasons-list"></div>
+      <button class="btn" id="balloon-next-btn" style="display: none;" onclick="goToScene(5)">Walk Down Memory Lane →</button>
+    </section>
+
+    <!-- SCENE 5: MEMORY LANE -->
+    <section class="scene" id="scene-5">
+      <h2>A walk down memory lane 📸</h2>
+      <p style="opacity: 0.8; margin-top: 4px;">Tap Next / Prev to flip through moments</p>
+      <div class="memory-card">
+        <img id="memory-img" src="" alt="Memory photo" />
+        <p id="memory-caption" style="font-size: 1rem; font-weight: 500;"></p>
+        <div class="memory-controls">
+          <button class="btn secondary" style="margin-top: 0; padding: 9px 18px;" onclick="prevMemory()">← Prev</button>
+          <button class="btn secondary" style="margin-top: 0; padding: 9px 18px;" onclick="nextMemory()">Next →</button>
+        </div>
+      </div>
+      <button class="btn" onclick="goToScene(6)">Open Your Letter 💌</button>
+    </section>
+
+    <!-- SCENE 6: ENVELOPE LETTER -->
+    <section class="scene" id="scene-6">
+      <h2>A special note for you</h2>
+      <div class="envelope" id="envelope" onclick="openLetter()">✉️</div>
+      <p id="envelope-hint" style="opacity: 0.8;">Tap the envelope to open</p>
+      <div class="letter-paper" id="letter-paper"></div>
+      <button class="btn" id="letter-next-btn" style="display: none;" onclick="goToScene(7)">Continue →</button>
+    </section>
+
+    <!-- SCENE 7: FINALE -->
+    <section class="scene" id="scene-7">
+      <p style="letter-spacing: 2px; opacity: 0.85;">CELEBRATING YOU</p>
+      <h1 class="finale-title" id="finale-heading"></h1>
+      <p style="font-size: 1.05rem; opacity: 0.9;" id="finale-credit"></p>
+      <button class="btn" onclick="replayExperience()">Replay the Preview ↻</button>
+    </section>
+  </div>
+
+  <script>
+    // =========================================================================
+    // CUSTOMIZE EVERYTHING HERE (Sir, sirf is CONFIG object ko edit karein)
+    // =========================================================================
+    const CONFIG = {
+      friendName: "Rohan",                 // Dost ka naam
+      senderName: "Aapka Dost",            // Aapka naam
+      ageText: "Turning 22 🎉",            // Age ya koi bhi special line
+      introSubtitle: "a little something for you",
+      introHeartEmoji: "🩷",
+      cakeTitle: "First things first 🎂",
+      wishPrompt: "Make a wish and tap the candle to blow it out! ✨",
+
+      // Balloons & Reasons (jitne chahein utne items add/edit kar sakte hain)
+      reasons: [
+        "Nobody listens the way you do 🎧",
+        "You make bad days feel lighter 😄",
+        "You make normal days feel special ✨",
+        "You always know what to say 💬",
+        "You're a real one through thick and thin 🤝"
+      ],
+
+      // Memory Lane Photos & Captions
+      // Apni photos ka local path (jaise "photos/img1.jpg") ya online URL daalein
+      memories: [
+        {
+          image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
+          caption: "Best times and endless laughs together 😄"
+        },
+        {
+          image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80",
+          caption: "Always having each other's back 🙌"
+        },
+        {
+          image: "https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?auto=format&fit=crop&w=800&q=80",
+          caption: "Here's to many more memories ahead 🚀"
+        }
+      ],
+
+      // Letter Text (\n se nayi line aati hai)
+      letterGreeting: "Dear Rohan,",
+      letterBody:
+        "Happy Birthday! 🎉\n\n" +
+        "I'm really grateful to have a friend like you in my life. " +
+        "Wishing you great health, success, peace, and endless reasons to smile this year.\n\n" +
+        "Keep shining, bro!",
+      letterSignOff: "With best wishes,\nAapka Dost"
+    };
+    // =========================================================================
+
+    let currentMemoryIndex = 0;
+    let poppedCount = 0;
+
+    // Populate static text from CONFIG
+    function initContent() {
+      document.title = `Happy Birthday, ${CONFIG.friendName}!`;
+      document.getElementById("intro-subtitle").textContent = CONFIG.introSubtitle;
+      document.getElementById("intro-heart").textContent = CONFIG.introHeartEmoji;
+      document.getElementById("tree-top-label").textContent = "it's officially your day";
+      document.getElementById("tree-heading").textContent = `Happy Birthday, ${CONFIG.friendName}`;
+      document.getElementById("tree-sub-label").textContent = `and just like that, you're ${CONFIG.ageText}`;
+      document.getElementById("cake-title").textContent = CONFIG.cakeTitle;
+      document.getElementById("balloon-instruction").textContent =
+        `${CONFIG.reasons.length} balloons. Each one holds a reason you're appreciated. Pop them all 🪄`;
+      document.getElementById("finale-heading").textContent = `HAPPY BIRTHDAY ${CONFIG.friendName.toUpperCase()}!`;
+      document.getElementById("finale-credit").textContent =
+        `Made with appreciation, just for you — ${CONFIG.senderName} ✨`;
+
+      buildHeartTree();
+      buildBalloons();
+      renderMemory();
+      buildLetter();
+      spawnParticles();
+    }
+
+    function spawnParticles() {
+      const box = document.getElementById("particles");
+      box.innerHTML = "";
+      const colors = ["#ff758f", "#ffb347", "#cdb4db", "#ffc8dd", "#a2d2ff"];
+      for (let i = 0; i < 22; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        const size = 8 + Math.random() * 14;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.left = `${Math.random() * 100}%`;
+        p.style.background = colors[i % colors.length];
+        p.style.animationDuration = `${8 + Math.random() * 10}s`;
+        p.style.animationDelay = `${Math.random() * 6}s`;
+        box.appendChild(p);
+      }
+    }
+
+    function goToScene(num) {
+      document.querySelectorAll(".scene").forEach((s) => s.classList.remove("active"));
+      document.getElementById(`scene-${num}`).classList.add("active");
+
+      // Light warm theme for Scene 2 like video
+      if (num === 2) {
+        document.body.classList.add("light-mode");
+      } else {
+        document.body.classList.remove("light-mode");
+      }
+
+      if (num === 3) {
+        startCakeAnimation();
+      }
+
+      if (num === 7) {
+        launchConfetti();
+      }
+    }
+
+    // Scene 1 action
+    function shootArrow() {
+      const stage = document.getElementById("heart-stage");
+      stage.classList.add("shot");
+      setTimeout(() => goToScene(2), 950);
+    }
+
+    // Scene 2 heart tree
+    function buildHeartTree() {
+      const canopy = document.getElementById("tree-canopy");
+      canopy.innerHTML = "";
+      const hearts = ["💗", "💖", "🧡", "💛", "🩷", "🌸"];
+      for (let i = 0; i < 28; i++) {
+        const h = document.createElement("span");
+        h.className = "leaf-heart";
+        h.textContent = hearts[i % hearts.length];
+        h.style.animationDelay = `${i * 0.04}s`;
+        canopy.appendChild(h);
+      }
+    }
+
+    // Scene 3 cake animation
+    function startCakeAnimation() {
+      const l3 = document.getElementById("layer-3");
+      const l2 = document.getElementById("layer-2");
+      const l1 = document.getElementById("layer-1");
+      const candle = document.getElementById("candle");
+      const status = document.getElementById("cake-status");
+      const wish = document.getElementById("wish-text");
+      const nextBtn = document.getElementById("cake-next-btn");
+
+      [l3, l2, l1].forEach((el) => el.classList.remove("show"));
+      candle.style.opacity = "0";
+      candle.textContent = "🕯️";
+      nextBtn.style.display = "none";
+      wish.textContent = "";
+      status.textContent = "Baking something sweet...";
+
+      setTimeout(() => l3.classList.add("show"), 300);
+      setTimeout(() => l2.classList.add("show"), 750);
+      setTimeout(() => l1.classList.add("show"), 1200);
+      setTimeout(() => {
+        candle.style.opacity = "1";
+        status.textContent = `Happy Birthday, ${CONFIG.friendName}!`;
+        wish.textContent = CONFIG.wishPrompt;
+      }, 1700);
+    }
+
+    function blowCandle() {
+      const candle = document.getElementById("candle");
+      const wish = document.getElementById("wish-text");
+      const nextBtn = document.getElementById("cake-next-btn");
+      candle.textContent = "💨";
+      wish.textContent = "Wish made! 🎉";
+      nextBtn.style.display = "inline-block";
+    }
+
+    // Scene 4 balloons
+    function buildBalloons() {
+      const row = document.getElementById("balloons-row");
+      const list = document.getElementById("reasons-list");
+      const nextBtn = document.getElementById("balloon-next-btn");
+      row.innerHTML = "";
+      list.innerHTML = "";
+      nextBtn.style.display = "none";
+      poppedCount = 0;
+
+      const palette = ["#ff5c8a", "#ff8e53", "#7b2cbf", "#00b4d8", "#f72585"];
+
+      CONFIG.reasons.forEach((reasonText, idx) => {
+        const b = document.createElement("div");
+        b.className = "balloon";
+        b.textContent = `#${idx + 1}`;
+        b.style.background = palette[idx % palette.length];
+        b.onclick = () => {
+          if (b.classList.contains("popped")) return;
+          b.classList.add("popped");
+          poppedCount++;
+
+          const card = document.createElement("div");
+          card.className = "reason-card";
+          card.innerHTML = `<div class="reason-tag">REASON NO. ${idx + 1}</div><div>${reasonText}</div>`;
+          list.appendChild(card);
+
+          if (poppedCount === CONFIG.reasons.length) {
+            nextBtn.style.display = "inline-block";
+          }
+        };
+        row.appendChild(b);
+      });
+    }
+
+    // Scene 5 memories
+    function renderMemory() {
+      const item = CONFIG.memories[currentMemoryIndex] || { image: "", caption: "" };
+      document.getElementById("memory-img").src = item.image;
+      document.getElementById("memory-caption").textContent = item.caption;
+    }
+
+    function nextMemory() {
+      currentMemoryIndex = (currentMemoryIndex + 1) % CONFIG.memories.length;
+      renderMemory();
+    }
+
+    function prevMemory() {
+      currentMemoryIndex =
+        (currentMemoryIndex - 1 + CONFIG.memories.length) % CONFIG.memories.length;
+      renderMemory();
+    }
+
+    // Scene 6 letter
+    function buildLetter() {
+      const paper = document.getElementById("letter-paper");
+      paper.innerHTML = `
+        <h3 style="margin-bottom: 10px;">${CONFIG.letterGreeting}</h3>
+        <p>${CONFIG.letterBody}</p>
+        <p style="margin-top: 16px; font-weight: 600;">${CONFIG.letterSignOff}</p>
+      `;
+    }
+
+    function openLetter() {
+      document.getElementById("envelope").textContent = "💌";
+      document.getElementById("envelope-hint").style.display = "none";
+      document.getElementById("letter-paper").classList.add("open");
+      document.getElementById("letter-next-btn").style.display = "inline-block";
+    }
+
+    // Scene 7 confetti & replay
+    function launchConfetti() {
+      const colors = ["#ff5c8a", "#ffb347", "#4cc9f0", "#ffd166", "#b5179e"];
+      for (let i = 0; i < 65; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti-piece";
+        c.style.left = `${Math.random() * 100}vw`;
+        c.style.background = colors[i % colors.length];
+        c.style.animationDuration = `${2.2 + Math.random() * 2.5}s`;
+        c.style.animationDelay = `${Math.random() * 0.8}s`;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 5200);
+      }
+    }
+
+    function replayExperience() {
+      document.getElementById("heart-stage").classList.remove("shot");
+      document.getElementById("letter-paper").classList.remove("open");
+      document.getElementById("envelope").textContent = "✉️";
+      document.getElementById("envelope-hint").style.display = "block";
+      document.getElementById("letter-next-btn").style.display = "none";
+      currentMemoryIndex = 0;
+      renderMemory();
+      buildBalloons();
+      goToScene(1);
+    }
+
+    initContent();
+  </script>
+</body>
+</html>
