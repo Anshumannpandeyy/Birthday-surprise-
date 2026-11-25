@@ -2,753 +2,843 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy Birthday Surprise</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy Birthday, Shubhi!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark-1: #190b24;
-      --bg-dark-2: #36123d;
-      --bg-warm-1: #fff6f0;
-      --bg-warm-2: #ffe3e8;
-      --accent: #ff5c8a;
-      --accent-2: #ffb347;
-      --text-light: #fff9fb;
-      --text-dark: #2c1629;
-      --card-bg: rgba(255, 255, 255, 0.1);
+      --bg-dark: #160914;
+      --bg-card: #241021;
+      --pink: #ff4d8d;
+      --pink-soft: #ff8fb8;
+      --rose: #e11d48;
+      --gold: #fbbf24;
+      --cream: #fff7ed;
+      --paper: #fffdf7;
+      --line: rgba(180, 130, 90, 0.22);
+      --text-light: #fff9fc;
+      --text-muted: rgba(255, 240, 247, 0.72);
     }
 
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
       margin: 0;
       padding: 0;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      overflow-x: hidden;
-      background: radial-gradient(circle at top, var(--bg-dark-2), var(--bg-dark-1));
-      color: var(--text-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      transition: background 0.8s ease, color 0.8s ease;
-    }
-
-    body.light-mode {
-      background: linear-gradient(135deg, var(--bg-warm-1), var(--bg-warm-2));
-      color: var(--text-dark);
-    }
-
-    /* Ambient floating particles */
-    .particles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
-    }
-
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.45;
-      animation: floatUp linear infinite;
-    }
-
-    @keyframes floatUp {
-      from {
-        transform: translateY(110vh) scale(0.8);
-      }
-      to {
-        transform: translateY(-15vh) scale(1.2);
-      }
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
       width: 100%;
-      max-width: 680px;
-      padding: 24px 18px;
-      text-align: center;
+      height: 100%;
+      background: #0b040a;
+      color: var(--text-light);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .scene {
-      display: none;
-      animation: fadeIn 0.6s ease forwards;
+    .app-shell {
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+      height: 100dvh;
+      max-height: 920px;
+      overflow: hidden;
+      background: radial-gradient(circle at top, #2c1028 0%, #150813 65%, #0d040c 100%);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.75);
     }
 
-    .scene.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(16px);
+    @media (min-width: 500px) {
+      .app-shell {
+        height: 94dvh;
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
-    .btn {
-      margin-top: 22px;
-      padding: 12px 26px;
-      border: none;
+    /* Top bar */
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      pointer-events: none;
+    }
+
+    .top-btn {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 13px;
       border-radius: 999px;
-      font-size: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(18, 8, 17, 0.58);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      color: #fff;
-      background: linear-gradient(135deg, var(--accent), #ff8552);
-      box-shadow: 0 10px 25px rgba(255, 92, 138, 0.35);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.18s ease, background 0.18s ease;
     }
 
-    .btn:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 14px 30px rgba(255, 92, 138, 0.45);
+    .top-btn:active {
+      transform: scale(0.95);
     }
 
-    .btn.secondary {
-      background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: none;
-    }
-
-    /* Scene 1: Intro Heart & Arrow */
-    .intro-sub {
-      font-size: 1.05rem;
-      letter-spacing: 0.5px;
-      opacity: 0.85;
-      margin-bottom: 18px;
-    }
-
-    .heart-stage {
-      position: relative;
-      width: 240px;
-      height: 190px;
-      margin: 0 auto 10px;
-      display: flex;
-      align-items: center;
+    .icon-circle {
+      width: 38px;
+      height: 38px;
+      padding: 0;
       justify-content: center;
-      cursor: pointer;
+      font-size: 16px;
     }
 
-    .glow-heart {
-      font-size: 5.5rem;
-      filter: drop-shadow(0 0 24px rgba(255, 77, 121, 0.65));
-      animation: pulseHeart 1.6s infinite ease-in-out;
-    }
-
-    .arrow {
+    /* Confetti / Particle Canvas */
+    #fxCanvas {
       position: absolute;
-      left: -30px;
-      top: 52%;
-      font-size: 2rem;
-      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 45;
     }
 
-    .heart-stage.shot .arrow {
-      transform: translateX(135px) translateY(-8px);
-      opacity: 0;
-    }
-
-    .heart-stage.shot .glow-heart {
-      transform: scale(1.22);
-      transition: transform 0.4s ease;
-    }
-
-    @keyframes pulseHeart {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-    }
-
-    /* Scene 2: Heart Tree */
-    .tree-box {
-      background: rgba(255, 255, 255, 0.65);
-      backdrop-filter: blur(8px);
-      border-radius: 24px;
-      padding: 28px 20px;
-      box-shadow: 0 18px 45px rgba(80, 20, 50, 0.12);
-    }
-
-    .canopy {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-      max-width: 250px;
-      margin: 12px auto 0;
-    }
-
-    .leaf-heart {
-      font-size: 1.35rem;
-      animation: popIn 0.5s ease backwards;
-    }
-
-    .trunk {
-      width: 14px;
-      height: 68px;
-      background: linear-gradient(#6e3b23, #4a2514);
-      margin: 0 auto 14px;
-      border-radius: 0 0 8px 8px;
-    }
-
-    @keyframes popIn {
-      from { transform: scale(0); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    /* Scene 3: Cake & Candle */
-    .cake-wrap {
-      margin: 26px auto;
+    /* Screens */
+    .screen {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      padding: 64px 22px 28px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(18px) scale(0.985);
+      transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.45s;
+      overflow-y: auto;
+      scrollbar-width: none;
     }
 
-    .candle {
-      font-size: 1.8rem;
-      cursor: pointer;
+    .screen::-webkit-scrollbar {
+      display: none;
+    }
+
+    .screen.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Scene 1: Bow & Arrow Pull */
+    .scene-bow {
+      background: radial-gradient(circle at 50% 42%, #ffdfeb 0%, #f8c6d8 48%, #e8a7be 100%);
+      color: #3a1226;
+      justify-content: space-between;
+      padding-top: 76px;
+      padding-bottom: 42px;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .bow-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 18px;
+      color: #7c2d52;
+      margin-top: 8px;
+    }
+
+    .heart-target-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    .heart-glow {
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 64, 129, 0.38) 0%, rgba(255, 64, 129, 0) 70%);
+      animation: pulseGlow 2.2s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(0.95); opacity: 0.7; }
+      50% { transform: scale(1.12); opacity: 1; }
+    }
+
+    .big-heart-svg {
+      width: 136px;
+      height: 136px;
+      filter: drop-shadow(0 12px 24px rgba(219, 39, 119, 0.35));
       transition: transform 0.25s ease;
     }
 
-    .cake-layer {
-      border-radius: 12px;
-      background: linear-gradient(90deg, #ff9ebb, #ffd1dc, #ff9ebb);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-      opacity: 0;
-      transform: translateY(-25px);
-      transition: all 0.45s ease;
+    .bow-stage {
+      position: relative;
+      width: 240px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
     }
 
-    .cake-layer.show {
+    .bow-stage:active {
+      cursor: grabbing;
+    }
+
+    .bow-assembly {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.12s ease-out;
+    }
+
+    .pull-hint {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #832750;
+      margin-top: 8px;
+    }
+
+    .pull-knob {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid rgba(131, 39, 80, 0.45);
+      background: rgba(255, 255, 255, 0.75);
+      margin-top: 10px;
+      animation: bounceDown 1.4s infinite;
+    }
+
+    @keyframes bounceDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* Scene 2: Pink Birthday Card */
+    .scene-bday-card {
+      background: linear-gradient(160deg, #ff3377 0%, #e11d63 52%, #9d174d 100%);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+
+    .card-kicker {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 18px;
+      color: rgba(255, 245, 250, 0.92);
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card-hero-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(46px, 13vw, 64px);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      position: relative;
+      z-index: 2;
+    }
+
+    .scribble-line {
+      width: 170px;
+      height: 18px;
+      margin: 14px auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card-sub {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 17px;
+      color: rgba(255, 240, 247, 0.92);
+      position: relative;
+      z-index: 2;
+    }
+
+    .tap-pill {
+      margin-top: 34px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Scene 3: Heart Balloon Tree for Shubhi */
+    .scene-tree {
+      background: radial-gradient(circle at 50% 25%, #fff0f5 0%, #f9d8e4 55%, #ecc2d3 100%);
+      color: #3b1126;
+      justify-content: flex-end;
+      padding-bottom: 34px;
+      cursor: pointer;
+    }
+
+    .tree-canvas-box {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    .tree-svg {
+      width: 310px;
+      max-width: 88vw;
+      height: auto;
+      overflow: visible;
+    }
+
+    .tree-caption-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 24px;
+      padding: 18px 20px;
+      text-align: left;
+      box-shadow: 0 14px 36px rgba(136, 19, 55, 0.12);
+      z-index: 5;
+    }
+
+    .tree-kicker {
+      font-size: 13px;
+      color: #9d174d;
+      font-weight: 600;
+    }
+
+    .tree-name-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 1.12;
+      color: #be123c;
+      margin: 4px 0 6px;
+    }
+
+    .tree-sub {
+      font-size: 14px;
+      color: #502238;
+      margin: 0;
+    }
+
+    .continue-subtle {
+      text-align: center;
+      font-size: 12px;
+      color: rgba(80, 34, 56, 0.65);
+      margin-top: 12px;
+      font-weight: 600;
+    }
+
+    /* Scene 4: Cake Scene */
+    .scene-cake {
+      background: radial-gradient(circle at 50% 30%, #3b1535 0%, #1c0a1b 70%, #110610 100%);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .cake-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 6px;
+    }
+
+    .cake-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .cake-visual {
+      position: relative;
+      width: 240px;
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 8px auto 18px;
+    }
+
+    .candle {
+      width: 10px;
+      height: 36px;
+      border-radius: 4px;
+      background: repeating-linear-gradient(45deg, #fff, #fff 5px, #fb7185 5px, #fb7185 10px);
+      position: relative;
+      margin-bottom: -2px;
+      opacity: 0;
+      transform: translateY(-16px);
+      transition: all 0.45s ease 0.55s;
+    }
+
+    .scene-cake.active .candle {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .layer-top { width: 130px; height: 26px; }
-    .layer-mid { width: 170px; height: 32px; }
-    .layer-bot { width: 210px; height: 38px; }
-
-    /* Scene 4: Pop the Balloons */
-    .balloons-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 14px;
-      margin: 22px 0;
+    .flame {
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 20px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      background: radial-gradient(circle at 50% 70%, #fffbeb 15%, #fbbf24 55%, #f97316 100%);
+      box-shadow: 0 0 18px #fbbf24, 0 0 36px #f97316;
+      animation: flicker 0.22s infinite alternate;
     }
 
-    .balloon {
-      width: 68px;
-      height: 84px;
-      border-radius: 50% 50% 46% 46%;
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(0.95) rotate(-2deg); }
+      100% { transform: translateX(-50%) scale(1.06) rotate(2deg); }
+    }
+
+    .cake-layer-top {
+      width: 156px;
+      height: 44px;
+      border-radius: 14px 14px 6px 6px;
+      background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 100%);
+      box-shadow: 0 6px 0 #fda4af;
+      opacity: 0;
+      transform: translateY(-28px);
+      transition: all 0.4s ease 0.35s;
+      z-index: 3;
+    }
+
+    .cake-layer-mid {
+      width: 184px;
+      height: 48px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #881337 0%, #6b0f2b 100%);
+      opacity: 0;
+      transform: translateY(-24px);
+      transition: all 0.4s ease 0.18s;
+      z-index: 2;
+    }
+
+    .cake-layer-bot {
+      width: 210px;
+      height: 52px;
+      border-radius: 12px 12px 16px 16px;
+      background: linear-gradient(180deg, #581c87 0%, #3b0764 100%);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.4s ease 0.05s;
+      z-index: 1;
+    }
+
+    .scene-cake.active .cake-layer-bot,
+    .scene-cake.active .cake-layer-mid,
+    .scene-cake.active .cake-layer-top {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cake-plate {
+      width: 236px;
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #cbd5e1, #f8fafc, #cbd5e1);
+      margin-top: 4px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .cake-wish-banner {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-top: 8px;
+    }
+
+    /* Scene 5: Pop the Balloons */
+    .scene-balloons {
+      justify-content: flex-start;
+      padding-top: 72px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin: 0 0 6px;
+    }
+
+    .section-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin: 0 0 14px;
+    }
+
+    .balloon-field {
+      position: relative;
+      width: 100%;
+      height: 185px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1.05rem;
-      color: #fff;
-      cursor: pointer;
-      position: relative;
-      box-shadow: inset -6px -8px 14px rgba(0, 0, 0, 0.2), 0 10px 20px rgba(0, 0, 0, 0.25);
-      transition: transform 0.25s ease, opacity 0.35s ease;
+      justify-content: space-around;
+      padding: 0 6px;
     }
 
-    .balloon::after {
+    .balloon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      animation: floatBalloon 2.8s ease-in-out infinite;
+    }
+
+    .balloon-item:nth-child(2n) {
+      animation-delay: 0.7s;
+      margin-top: 24px;
+    }
+
+    @keyframes floatBalloon {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-9px); }
+    }
+
+    .balloon-item.popped {
+      opacity: 0;
+      transform: scale(1.35);
+      pointer-events: none;
+    }
+
+    .balloon-shape {
+      width: 52px;
+      height: 64px;
+      border-radius: 50% 50% 46% 46% / 55% 55% 45% 45%;
+      box-shadow: inset -8px -10px 16px rgba(0, 0, 0, 0.22), 0 8px 18px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    .balloon-shape::after {
       content: "";
       position: absolute;
-      bottom: -18px;
-      width: 2px;
+      top: 10px;
+      left: 12px;
+      width: 10px;
       height: 18px;
-      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.38);
+      transform: rotate(-22deg);
     }
 
-    .balloon:hover {
-      transform: translateY(-6px) scale(1.05);
-    }
-
-    .balloon.popped {
-      transform: scale(0);
-      opacity: 0;
-      pointer-events: none;
+    .balloon-string {
+      width: 1.5px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.45);
     }
 
     .reasons-list {
+      width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 14px;
-      text-align: left;
+      gap: 9px;
+      margin-top: 6px;
     }
 
     .reason-card {
-      background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 14px;
-      padding: 12px 16px;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .reason-tag {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--accent-2);
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    /* Scene 5: Memory Lane */
-    .memory-card {
-      background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 20px;
-      padding: 16px;
-      max-width: 380px;
-      margin: 20px auto 0;
-      backdrop-filter: blur(10px);
-    }
-
-    .memory-card img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      border-radius: 14px;
-      margin-bottom: 12px;
       background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 11px 14px;
+      animation: popInCard 0.32s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .memory-controls {
-      display: flex;
+    @keyframes popInCard {
+      from { opacity: 0; transform: translateY(10px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .reason-badge {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pink-soft);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .reason-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .thousand-note {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--gold);
+      font-size: 15px;
+      margin: 14px 0 8px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 15px 22px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ff4d8d 0%, #f43f5e 50%, #fb923c 100%);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(244, 63, 94, 0.38);
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
-      gap: 12px;
-      margin-top: 12px;
+      gap: 8px;
     }
 
-    /* Scene 6: Envelope Letter */
-    .envelope {
-      width: 170px;
-      height: 115px;
-      margin: 24px auto;
-      background: linear-gradient(135deg, #ffd166, #f4a261);
-      border-radius: 12px;
+    .primary-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Scene 6: Memory Lane Polaroid Deck */
+    .scene-memories {
+      justify-content: space-between;
+      padding-top: 72px;
+      padding-bottom: 28px;
+    }
+
+    .deck-stage {
+      position: relative;
+      width: 100%;
+      height: 360px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.6rem;
-      cursor: pointer;
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
-      transition: transform 0.25s ease;
+      touch-action: pan-y;
     }
 
-    .envelope:hover {
-      transform: scale(1.05);
+    .polaroid {
+      position: absolute;
+      width: 256px;
+      background: #fffdf9;
+      color: #271722;
+      padding: 12px 12px 26px;
+      border-radius: 6px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+      cursor: grab;
+      user-select: none;
     }
 
-    .letter-paper {
-      display: none;
-      background: #fffdf7;
-      color: #2b1d26;
-      border-radius: 18px;
-      padding: 26px 22px;
-      text-align: left;
-      margin-top: 18px;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-      line-height: 1.65;
-      white-space: pre-line;
+    .polaroid-tape {
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      width: 72px;
+      height: 18px;
+      background: rgba(251, 191, 36, 0.55);
+      border-radius: 2px;
     }
 
-    .letter-paper.open {
+    .polaroid-img-box {
+      width: 100%;
+      height: 255px;
+      border-radius: 3px;
+      overflow: hidden;
+      background: #f3e8ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .polaroid-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
-      animation: fadeIn 0.5s ease;
     }
 
-    /* Scene 7: Finale */
-    .finale-title {
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
-      font-weight: 800;
-      margin: 12px 0;
-      background: linear-gradient(90deg, #ff758f, #ffb347, #ffd166);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .polaroid-footer {
+      text-align: center;
+      margin-top: 10px;
+      font-family: 'Caveat', cursive;
+      font-size: 20px;
+      color: #5c374c;
     }
 
-    .confetti-piece {
-      position: fixed;
-      top: -12px;
-      width: 10px;
-      height: 14px;
-      z-index: 20;
-      pointer-events: none;
-      animation: confettiFall linear forwards;
+    .dots-row {
+      display: flex;
+      gap: 7px;
+      justify-content: center;
+      margin-bottom: 12px;
     }
 
-    @keyframes confettiFall {
-      to {
-        transform: translateY(105vh) rotate(720deg);
-        opacity: 0.9;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="particles" id="particles"></div>
-
-  <div class="container">
-    <!-- SCENE 1: INTRO -->
-    <section class="scene active" id="scene-1">
-      <p class="intro-sub" id="intro-subtitle"></p>
-      <div class="heart-stage" id="heart-stage" onclick="shootArrow()">
-        <span class="arrow">🏹</span>
-        <span class="glow-heart" id="intro-heart"></span>
-      </div>
-      <p style="opacity: 0.75; font-size: 0.92rem;">Tap the heart to begin ✨</p>
-    </section>
-
-    <!-- SCENE 2: HEART TREE -->
-    <section class="scene" id="scene-2">
-      <div class="tree-box">
-        <p style="font-size: 0.95rem; opacity: 0.8;" id="tree-top-label"></p>
-        <h2 style="font-size: 2rem; margin: 6px 0;" id="tree-heading"></h2>
-        <p style="opacity: 0.85;" id="tree-sub-label"></p>
-        <div class="canopy" id="tree-canopy"></div>
-        <div class="trunk"></div>
-        <button class="btn" onclick="goToScene(3)">Next Surprise →</button>
-      </div>
-    </section>
-
-    <!-- SCENE 3: CAKE & CANDLE -->
-    <section class="scene" id="scene-3">
-      <h2 id="cake-title"></h2>
-      <p style="opacity: 0.8; margin-top: 6px;" id="cake-status">Baking something sweet...</p>
-      <div class="cake-wrap">
-        <div class="candle" id="candle" onclick="blowCandle()" style="opacity: 0;">🕯️</div>
-        <div class="cake-layer layer-top" id="layer-1"></div>
-        <div class="cake-layer layer-mid" id="layer-2"></div>
-        <div class="cake-layer layer-bot" id="layer-3"></div>
-      </div>
-      <p id="wish-text" style="min-height: 24px; color: var(--accent-2); font-weight: 600;"></p>
-      <button class="btn" id="cake-next-btn" style="display: none;" onclick="goToScene(4)">Pop Balloons 🎈</button>
-    </section>
-
-    <!-- SCENE 4: POP THE BALLOONS -->
-    <section class="scene" id="scene-4">
-      <h2>Pop the balloons 🎈</h2>
-      <p style="opacity: 0.82; margin-top: 6px;" id="balloon-instruction"></p>
-      <div class="balloons-row" id="balloons-row"></div>
-      <div class="reasons-list" id="reasons-list"></div>
-      <button class="btn" id="balloon-next-btn" style="display: none;" onclick="goToScene(5)">Walk Down Memory Lane →</button>
-    </section>
-
-    <!-- SCENE 5: MEMORY LANE -->
-    <section class="scene" id="scene-5">
-      <h2>A walk down memory lane 📸</h2>
-      <p style="opacity: 0.8; margin-top: 4px;">Tap Next / Prev to flip through moments</p>
-      <div class="memory-card">
-        <img id="memory-img" src="" alt="Memory photo" />
-        <p id="memory-caption" style="font-size: 1rem; font-weight: 500;"></p>
-        <div class="memory-controls">
-          <button class="btn secondary" style="margin-top: 0; padding: 9px 18px;" onclick="prevMemory()">← Prev</button>
-          <button class="btn secondary" style="margin-top: 0; padding: 9px 18px;" onclick="nextMemory()">Next →</button>
-        </div>
-      </div>
-      <button class="btn" onclick="goToScene(6)">Open Your Letter 💌</button>
-    </section>
-
-    <!-- SCENE 6: ENVELOPE LETTER -->
-    <section class="scene" id="scene-6">
-      <h2>A special note for you</h2>
-      <div class="envelope" id="envelope" onclick="openLetter()">✉️</div>
-      <p id="envelope-hint" style="opacity: 0.8;">Tap the envelope to open</p>
-      <div class="letter-paper" id="letter-paper"></div>
-      <button class="btn" id="letter-next-btn" style="display: none;" onclick="goToScene(7)">Continue →</button>
-    </section>
-
-    <!-- SCENE 7: FINALE -->
-    <section class="scene" id="scene-7">
-      <p style="letter-spacing: 2px; opacity: 0.85;">CELEBRATING YOU</p>
-      <h1 class="finale-title" id="finale-heading"></h1>
-      <p style="font-size: 1.05rem; opacity: 0.9;" id="finale-credit"></p>
-      <button class="btn" onclick="replayExperience()">Replay the Preview ↻</button>
-    </section>
-  </div>
-
-  <script>
-    // =========================================================================
-    // CUSTOMIZE EVERYTHING HERE (Sir, sirf is CONFIG object ko edit karein)
-    // =========================================================================
-    const CONFIG = {
-      friendName: "Rohan",                 // Dost ka naam
-      senderName: "Aapka Dost",            // Aapka naam
-      ageText: "Turning 22 🎉",            // Age ya koi bhi special line
-      introSubtitle: "a little something for you",
-      introHeartEmoji: "🩷",
-      cakeTitle: "First things first 🎂",
-      wishPrompt: "Make a wish and tap the candle to blow it out! ✨",
-
-      // Balloons & Reasons (jitne chahein utne items add/edit kar sakte hain)
-      reasons: [
-        "Nobody listens the way you do 🎧",
-        "You make bad days feel lighter 😄",
-        "You make normal days feel special ✨",
-        "You always know what to say 💬",
-        "You're a real one through thick and thin 🤝"
-      ],
-
-      // Memory Lane Photos & Captions
-      // Apni photos ka local path (jaise "photos/img1.jpg") ya online URL daalein
-      memories: [
-        {
-          image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
-          caption: "Best times and endless laughs together 😄"
-        },
-        {
-          image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80",
-          caption: "Always having each other's back 🙌"
-        },
-        {
-          image: "https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?auto=format&fit=crop&w=800&q=80",
-          caption: "Here's to many more memories ahead 🚀"
-        }
-      ],
-
-      // Letter Text (\n se nayi line aati hai)
-      letterGreeting: "Dear Rohan,",
-      letterBody:
-        "Happy Birthday! 🎉\n\n" +
-        "I'm really grateful to have a friend like you in my life. " +
-        "Wishing you great health, success, peace, and endless reasons to smile this year.\n\n" +
-        "Keep shining, bro!",
-      letterSignOff: "With best wishes,\nAapka Dost"
-    };
-    // =========================================================================
-
-    let currentMemoryIndex = 0;
-    let poppedCount = 0;
-
-    // Populate static text from CONFIG
-    function initContent() {
-      document.title = `Happy Birthday, ${CONFIG.friendName}!`;
-      document.getElementById("intro-subtitle").textContent = CONFIG.introSubtitle;
-      document.getElementById("intro-heart").textContent = CONFIG.introHeartEmoji;
-      document.getElementById("tree-top-label").textContent = "it's officially your day";
-      document.getElementById("tree-heading").textContent = `Happy Birthday, ${CONFIG.friendName}`;
-      document.getElementById("tree-sub-label").textContent = `and just like that, you're ${CONFIG.ageText}`;
-      document.getElementById("cake-title").textContent = CONFIG.cakeTitle;
-      document.getElementById("balloon-instruction").textContent =
-        `${CONFIG.reasons.length} balloons. Each one holds a reason you're appreciated. Pop them all 🪄`;
-      document.getElementById("finale-heading").textContent = `HAPPY BIRTHDAY ${CONFIG.friendName.toUpperCase()}!`;
-      document.getElementById("finale-credit").textContent =
-        `Made with appreciation, just for you — ${CONFIG.senderName} ✨`;
-
-      buildHeartTree();
-      buildBalloons();
-      renderMemory();
-      buildLetter();
-      spawnParticles();
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      transition: all 0.25s ease;
     }
 
-    function spawnParticles() {
-      const box = document.getElementById("particles");
-      box.innerHTML = "";
-      const colors = ["#ff758f", "#ffb347", "#cdb4db", "#ffc8dd", "#a2d2ff"];
-      for (let i = 0; i < 22; i++) {
-        const p = document.createElement("div");
-        p.className = "particle";
-        const size = 8 + Math.random() * 14;
-        p.style.width = `${size}px`;
-        p.style.height = `${size}px`;
-        p.style.left = `${Math.random() * 100}%`;
-        p.style.background = colors[i % colors.length];
-        p.style.animationDuration = `${8 + Math.random() * 10}s`;
-        p.style.animationDelay = `${Math.random() * 6}s`;
-        box.appendChild(p);
-      }
+    .dot.active {
+      width: 20px;
+      border-radius: 999px;
+      background: var(--pink-soft);
     }
 
-    function goToScene(num) {
-      document.querySelectorAll(".scene").forEach((s) => s.classList.remove("active"));
-      document.getElementById(`scene-${num}`).classList.add("active");
-
-      // Light warm theme for Scene 2 like video
-      if (num === 2) {
-        document.body.classList.add("light-mode");
-      } else {
-        document.body.classList.remove("light-mode");
-      }
-
-      if (num === 3) {
-        startCakeAnimation();
-      }
-
-      if (num === 7) {
-        launchConfetti();
-      }
+    /* Scene 7: Envelope & Letter */
+    .scene-letter {
+      justify-content: flex-start;
+      padding-top: 74px;
+      padding-bottom: 34px;
     }
 
-    // Scene 1 action
-    function shootArrow() {
-      const stage = document.getElementById("heart-stage");
-      stage.classList.add("shot");
-      setTimeout(() => goToScene(2), 950);
+    .envelope-box {
+      width: 280px;
+      height: 185px;
+      margin: 24px auto;
+      position: relative;
+      border-radius: 16px;
+      background: linear-gradient(145deg, #f59e0b 0%, #d97706 60%, #b45309 100%);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.22s ease;
     }
 
-    // Scene 2 heart tree
-    function buildHeartTree() {
-      const canopy = document.getElementById("tree-canopy");
-      canopy.innerHTML = "";
-      const hearts = ["💗", "💖", "🧡", "💛", "🩷", "🌸"];
-      for (let i = 0; i < 28; i++) {
-        const h = document.createElement("span");
-        h.className = "leaf-heart";
-        h.textContent = hearts[i % hearts.length];
-        h.style.animationDelay = `${i * 0.04}s`;
-        canopy.appendChild(h);
-      }
+    .envelope-box:hover {
+      transform: translateY(-4px);
     }
 
-    // Scene 3 cake animation
-    function startCakeAnimation() {
-      const l3 = document.getElementById("layer-3");
-      const l2 = document.getElementById("layer-2");
-      const l1 = document.getElementById("layer-1");
-      const candle = document.getElementById("candle");
-      const status = document.getElementById("cake-status");
-      const wish = document.getElementById("wish-text");
-      const nextBtn = document.getElementById("cake-next-btn");
-
-      [l3, l2, l1].forEach((el) => el.classList.remove("show"));
-      candle.style.opacity = "0";
-      candle.textContent = "🕯️";
-      nextBtn.style.display = "none";
-      wish.textContent = "";
-      status.textContent = "Baking something sweet...";
-
-      setTimeout(() => l3.classList.add("show"), 300);
-      setTimeout(() => l2.classList.add("show"), 750);
-      setTimeout(() => l1.classList.add("show"), 1200);
-      setTimeout(() => {
-        candle.style.opacity = "1";
-        status.textContent = `Happy Birthday, ${CONFIG.friendName}!`;
-        wish.textContent = CONFIG.wishPrompt;
-      }, 1700);
+    .wax-seal {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fb7185, #be123c);
+      border: 2px solid rgba(255, 255, 255, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+      margin-bottom: 10px;
     }
 
-    function blowCandle() {
-      const candle = document.getElementById("candle");
-      const wish = document.getElementById("wish-text");
-      const nextBtn = document.getElementById("cake-next-btn");
-      candle.textContent = "💨";
-      wish.textContent = "Wish made! 🎉";
-      nextBtn.style.display = "inline-block";
+    .letter-sheet {
+      width: 100%;
+      background: var(--paper);
+      color: #2b1a24;
+      border-radius: 18px;
+      padding: 22px 20px 26px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      background-image: repeating-linear-gradient(
+        transparent,
+        transparent 29px,
+        var(--line) 30px
+      );
+      display: none;
     }
 
-    // Scene 4 balloons
-    function buildBalloons() {
-      const row = document.getElementById("balloons-row");
-      const list = document.getElementById("reasons-list");
-      const nextBtn = document.getElementById("balloon-next-btn");
-      row.innerHTML = "";
-      list.innerHTML = "";
-      nextBtn.style.display = "none";
-      poppedCount = 0;
-
-      const palette = ["#ff5c8a", "#ff8e53", "#7b2cbf", "#00b4d8", "#f72585"];
-
-      CONFIG.reasons.forEach((reasonText, idx) => {
-        const b = document.createElement("div");
-        b.className = "balloon";
-        b.textContent = `#${idx + 1}`;
-        b.style.background = palette[idx % palette.length];
-        b.onclick = () => {
-          if (b.classList.contains("popped")) return;
-          b.classList.add("popped");
-          poppedCount++;
-
-          const card = document.createElement("div");
-          card.className = "reason-card";
-          card.innerHTML = `<div class="reason-tag">REASON NO. ${idx + 1}</div><div>${reasonText}</div>`;
-          list.appendChild(card);
-
-          if (poppedCount === CONFIG.reasons.length) {
-            nextBtn.style.display = "inline-block";
-          }
-        };
-        row.appendChild(b);
-      });
+    .letter-sheet.open {
+      display: block;
+      animation: popInCard 0.4s ease;
     }
 
-    // Scene 5 memories
-    function renderMemory() {
-      const item = CONFIG.memories[currentMemoryIndex] || { image: "", caption: "" };
-      document.getElementById("memory-img").src = item.image;
-      document.getElementById("memory-caption").textContent = item.caption;
+    .letter-salutation {
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      font-weight: 700;
+      color: #be123c;
+      margin-bottom: 8px;
     }
 
-    function nextMemory() {
-      currentMemoryIndex = (currentMemoryIndex + 1) % CONFIG.memories.length;
-      renderMemory();
+    .letter-body {
+      font-family: 'Caveat', cursive;
+      font-size: 23px;
+      line-height: 30px;
+      color: #2c1824;
+      white-space: pre-wrap;
+      min-height: 220px;
     }
 
-    function prevMemory() {
-      currentMemoryIndex =
-        (currentMemoryIndex - 1 + CONFIG.memories.length) % CONFIG.memories.length;
-      renderMemory();
+    .letter-sign {
+      margin-top: 16px;
+      text-align: right;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: #7c2d52;
+      font-weight: 600;
     }
 
-    // Scene 6 letter
-    function buildLetter() {
-      const paper = document.getElementById("letter-paper");
-      paper.innerHTML = `
-        <h3 style="margin-bottom: 10px;">${CONFIG.letterGreeting}</h3>
-        <p>${CONFIG.letterBody}</p>
-        <p style="margin-top: 16px; font-weight: 600;">${CONFIG.letterSignOff}</p>
-      `;
+    /* Scene 8: Kitty Video Surprise */
+    .scene-kitty {
+      justify-content: space-between;
+      padding-top: 72px;
+      padding-bottom: 30px;
+      text-align: center;
     }
 
-    function openLetter() {
-      document.getElementById("envelope").textContent = "💌";
-      document.getElementById("envelope-hint").style.display = "none";
-      document.getElementById("letter-paper").classList.add("open");
-      document.getElementById("letter-next-btn").style.display = "inline-block";
-    }
-
-    // Scene 7 confetti & replay
-    function launchConfetti() {
-      const colors = ["#ff5c8a", "#ffb347", "#4cc9f0", "#ffd166", "#b5179e"];
-      for (let i = 0; i < 65; i++) {
-        const c = document.createElement("div");
-        c.className = "confetti-piece";
-        c.style.left = `${Math.random() * 100}vw`;
-        c.style.background = colors[i % colors.length];
-        c.style.animationDuration = `${2.2 + Math.random() * 2.5}s`;
-        c.style.animationDelay = `${Math.random() * 0.8}s`;
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 5200);
-      }
-    }
-
-    function replayExperience() {
-      document.getElementById("heart-stage").classList.remove("shot");
-      document.getElementById("letter-paper").classList.remove("open");
-      document.getElementById("envelope").textContent = "✉️";
-      document.getElementById("envelope-hint").style.display = "block";
-      document.getElementById("letter-next-btn").style.display = "none";
-      currentMemoryIndex = 0;
-      renderMemory();
-      buildBalloons();
-      goToScene(1);
-    }
-
-    initContent();
-  </script>
-</body>
-</html>
+    .kitty-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 24px;
+      padding: 18px;
+      margin: 14px 0;
+  
